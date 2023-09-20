@@ -1,16 +1,18 @@
 package id.pratama.deepdive6.ui
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import id.pratama.deepdive6.R
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+private const val ARG_TITLE = "title"
+private const val ARG_DESC = "desc"
+private const val ARG_ILLUSTRATION = "illustration"
 
 /**
  * A simple [Fragment] subclass.
@@ -18,43 +20,60 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class OnboardingContentFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    // variable untuk menampung data yang dikirim dari activity
+    private var title: String? = null
+    private var desc: String? = null
+    private var illustration: Int? = null
+
+    lateinit var tvTitle: TextView
+    lateinit var tvDesc: TextView
+    lateinit var imgIllustration: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            title = it.getString("key_title")
+            desc = it.getString("key_desc")
+            illustration = it.getInt("key_illustration")
         }
+
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        Log.d("debug", "fragment onCreateView")
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_onboarding_content, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // inisiasi view dilakukan disini
+        tvTitle = view.findViewById(R.id.tvTitle)
+        tvDesc = view.findViewById(R.id.tvDesc)
+        imgIllustration = view.findViewById(R.id.imgIllustration)
+
+        tvTitle.text = title
+        tvDesc.text = desc
+        illustration?.let {
+            imgIllustration.setImageResource(it)
+        }
+    }
+
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment OnboardingContentFragment.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(title: String, desc: String, illustration: Int) =
             OnboardingContentFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putString("key_title", title)
+                    putString("key_desc", desc)
+                    putInt("key_illustration", illustration)
                 }
             }
     }
 }
+
